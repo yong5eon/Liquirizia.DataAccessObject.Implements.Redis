@@ -33,7 +33,7 @@ setup(
 		'Application Framework :: Liquirizia :: DataAccessObject :: Redis',
 	],
 	install_requires=[
-		'Liquirizia@git+https://github.com/team-of-mine-labs/Liquirizia',
+		'Liquirizia@git+https://github.com/yong5eon/Liquirizia',
 		'redis>=3.5.3',
 	],
 	python_requires='>=3.8'
