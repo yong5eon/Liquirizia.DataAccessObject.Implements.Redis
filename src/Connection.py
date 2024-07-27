@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from Liquirizia.DataAccessObject import DataAccessObject as DataAccessObjectBase
+from Liquirizia.DataAccessObject import Connection as BaseConnection
 from Liquirizia.DataAccessObject.Properties.Cache import Cache
 
-from .DataAccessObjectConfiguration import DataAccessObjectConfiguration
+from .Configuration import Configuration
 
 from redis import Redis, ConnectionPool
 
@@ -12,15 +12,14 @@ __all__ = (
 )
 
 
-class DataAccessObject(DataAccessObjectBase, Cache):
+class Connection(BaseConnection, Cache):
+	"""Connection Class for Redis"""
 	"""
-	Data Access Object Class for Redis
-
 	TODO :
-		* Exception Handling with DataAccessObjectError
+		* Exception Handling with Error of DataAccessObject
 	"""
 
-	def __init__(self, conf: DataAccessObjectConfiguration):
+	def __init__(self, conf: Configuration):
 		if conf.persist:
 			self.pool = ConnectionPool(host=conf.host, port=conf.port, max_connections=conf.max, decode_responses=True)
 		else:
