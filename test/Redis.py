@@ -71,7 +71,7 @@ class Redis(Case):
 		con.set('sample', '1')
 		con.expire('sample', 3)
 		con.persist('sample')
-		sleep(3)
+		sleep(5)
 		ASSERT_IS_NOT_NONE(con.get('sample'))	
 		con.delete('sample')
 		return
@@ -82,7 +82,7 @@ class Redis(Case):
 		con.set('sample', '1')
 		con.persist('sample')
 		con.expire('sample', 3)
-		sleep(3)
+		sleep(5)
 		ASSERT_IS_NONE(con.get('sample'))	
 		con.delete('sample')
 		return
