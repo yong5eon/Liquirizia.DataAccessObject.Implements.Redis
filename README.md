@@ -246,15 +246,15 @@ if __name__ == '__main__':
 
 ### Redis Cluster
 
-#### Build Predixy
-
 ```shell
-> docker image build --file=res/Predixy.7.0.1/.docker --tag=predixy:7.0.1 .
+> docker image build --file=res/Redis.7/.docker --tag=redis:7 .
+> docker-compose -p redis-cluster -f res/Redis.7.Cluster.docker-compose.yml up -d
 ```
 
-#### Build and Run Docker Compose
+### Redis Cluster with Predixy
 
 ```shell
-> docker-compose -f res/Redis.7.Cluster.docker-compose.yml build
-> docker-compose -p redis-cluster -f res/Redis.7.Cluster.docker-compose.yml up -d
+> docker image build --file=res/Redis.7/.docker --tag=redis:7 .
+> docker image build --file=res/Predixy.7.0.1/.docker --tag=predixy:7.0.1 .
+> docker-compose -p redis-predixy-cluster -f res/Redis.7.Prexidy.Cluster.docker-compose.yml up -d
 ```
