@@ -12,6 +12,8 @@ services:
     volumes: 
       - ./Redis.7/cluster.conf:/etc/redis/redis.conf
     command: redis-server /etc/redis/redis.conf
+    ports:
+      - 7000:7000
     networks:
       redis-cluster:
         ipv4_address: 172.70.0.20
@@ -21,6 +23,8 @@ services:
     volumes:
       - ./Redis.7/cluster.conf:/etc/redis/redis.conf
     command: redis-server /etc/redis/redis.conf
+    ports:
+      - 7001:7000
     networks:
       redis-cluster:
         ipv4_address: 172.70.0.21
@@ -30,6 +34,8 @@ services:
     volumes:
       - ./Redis.7/cluster.conf:/etc/redis/redis.conf
     command: redis-server /etc/redis/redis.conf
+    ports:
+      - 7002:7000
     networks:
       redis-cluster:
         ipv4_address: 172.70.0.22
@@ -44,22 +50,3 @@ services:
       - redis-cluster-0
       - redis-cluster-1
       - redis-cluster-2
-  redis-cluster:
-    image: predixy:7.0.1
-    container_name: redis-cluster
-    volumes:
-      - ./Predixy.7.0.1/predixy.conf:/etc/predixy/predixy.conf
-      - ./Predixy.7.0.1/auth.conf:/etc/predixy/auth.conf
-      - ./Predixy.7.0.1/try.conf:/etc/predixy/try.conf
-      - ./Predixy.7.0.1/latency.conf:/etc/predixy/latency.conf
-    command: /usr/bin/predixy /etc/predixy/predixy.conf
-    ports:
-      - 6379:6379
-    networks:
-      redis-cluster:
-        ipv4_address: 172.70.0.10
-    depends_on:
-      - redis-cluster-0
-      - redis-cluster-1
-      - redis-cluster-2
-      - redis-cluster-builder
