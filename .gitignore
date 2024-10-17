@@ -54,8 +54,7 @@ target/
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow
 __pypackages__/
 
-# Liquirizia
-.github
+# MISC
 .vscode
 .idea
 .old

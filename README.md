@@ -240,21 +240,13 @@ if __name__ == '__main__':
 ### Redis
 
 ```shell
-> docker image build --file=res/Redis.7/.docker --tag=redis:7 .
+> docker image build --file=res/Redis.7.docker.yml --tag=redis:7 .
 > docker container run --name=redis --detach --publish=6379:6379 redis:7
 ```
 
 ### Redis Cluster
 
-#### Build Predixy
-
 ```shell
-> docker image build --file=res/Predixy.7.0.1/.docker --tag=predixy:7.0.1 .
-```
-
-#### Build and Run Docker Compose
-
-```shell
-> docker-compose -f res/Redis.7.Cluster.docker-compose.yml build
+> docker image build --file=res/Redis.7.docker.yml --tag=redis:7 .
 > docker-compose -p redis-cluster -f res/Redis.7.Cluster.docker-compose.yml up -d
 ```
