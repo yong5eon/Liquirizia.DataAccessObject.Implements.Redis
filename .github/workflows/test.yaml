@@ -21,7 +21,7 @@ jobs:
       - name: Install Packages
         run: pip install --upgrade .
       - name: Build Redis
-        run: docker image build --file=res/Redis.7/.docker --tag=redis:7 .
+        run: docker image build --file=res/Redis.7.docker.yml --tag=redis:7 .
       - name: Run Redis
         run: docker container run --name=redis --detach --publish=6379:6379 redis:7
       - name: Check Redis docker
@@ -30,11 +30,3 @@ jobs:
         run: python -m Liquirizia.Test test
       - name: Stop Redis
         run: docker container stop redis
-      - name: Build Predixy
-        run: docker image build --file=res/Predixy.7.0.1/.docker --tag=predixy:7.0.1 .
-      - name: Run Redis Cluster with Predixy
-        run: docker-compose -p redis-predixy-cluster --file=res/Redis.7.Predixy.Cluster.docker-compose.yml up -d
-      - name: Test Redis Cluster
-        run: python -m Liquirizia.Test test
-      - name: Stop Redis Cluster
-        run: docker container stop redis-cluster
