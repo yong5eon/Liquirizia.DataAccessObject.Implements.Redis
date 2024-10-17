@@ -88,18 +88,6 @@ class Redis(Case):
 		return
 
 	@Order(5)
-	def testString(self):
-		con = Helper.Get('Sample')
-		stringType = String(con)
-		stringType.set('sample', 'string')
-		ASSERT_IS_EQUAL(stringType.get('sample'), 'string')
-		ASSERT_IS_EQUAL(stringType.getSet('sample', 'changed'), 'string')
-		ASSERT_IS_EQUAL(stringType.get('sample'), 'changed')
-		ASSERT_IS_EQUAL(stringType.len('sample'), 7)
-		con.delete('sample')
-		return
-
-	@Order(6)
 	def testList(self):
 		con = Helper.Get('Sample')
 		listType = List(con)
@@ -112,7 +100,7 @@ class Redis(Case):
 		con.delete('sample')
 		return
 
-	@Order(7)
+	@Order(6)
 	def testSet(self):
 		con = Helper.Get('Sample')
 		setType = Set(con)
@@ -124,7 +112,7 @@ class Redis(Case):
 		con.delete('sample')
 		return
 
-	@Order(8)
+	@Order(7)
 	def testSortedSet(self):
 		con = Helper.Get('Sample')
 		sortedSetType = SortedSet(con)
@@ -137,7 +125,7 @@ class Redis(Case):
 		con.delete('sample')
 		return
 
-	@Order(9)
+	@Order(8)
 	def testHash(self):
 		con = Helper.Get('Sample')
 		hashType = Hash(con)

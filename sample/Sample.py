@@ -4,7 +4,6 @@ from Liquirizia.DataAccessObject import Helper
 
 from Liquirizia.DataAccessObject.Implements.Redis import Connection, Configuration
 
-from Liquirizia.DataAccessObject.Implements.Redis.Types import String
 from Liquirizia.DataAccessObject.Implements.Redis.Types import List
 from Liquirizia.DataAccessObject.Implements.Redis.Types import Set
 from Liquirizia.DataAccessObject.Implements.Redis.Types import SortedSet
@@ -44,19 +43,6 @@ if __name__ == '__main__':
 	con.expire('sample:sample', 60)
 	# Delete Value
 	con.delete('sample:sample')
-
-	# String Type
-	stringType = String(con)
-	stringType.set('sample:string', 'string')
-	v = stringType.get('sample:string')
-	print(v, file=sys.stdout)
-	v = stringType.getSet('sample:string', 'changed')
-	print(v, file=sys.stdout)
-	v = stringType.get('sample:string')
-	print(v, file=sys.stdout)
-	v = stringType.len('sample:string')
-	print(v, file=sys.stdout)
-	con.delete('sample:string')
 
 	# List Type
 	listType = List(con)
