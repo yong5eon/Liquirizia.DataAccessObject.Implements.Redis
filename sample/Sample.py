@@ -67,6 +67,8 @@ if __name__ == '__main__':
 	print(_, file=sys.stdout)
 	_ = con.getList('sample')
 	print(_, file=sys.stdout)
+	for v in _:
+		print(v, file=sys.stdout)
 	con.delete('sample')
 
 	# # Set Type

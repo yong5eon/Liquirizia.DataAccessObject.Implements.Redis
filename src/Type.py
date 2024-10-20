@@ -14,5 +14,7 @@ class Type(BaseType):
 
 	def __init__(self, con: Connection, key: str):
 		self.connection = con.connection
-		self.key = key
+		self.encode = con.encode
+		self.decode = con.decode
+		self.key = str(key)
 		return

@@ -10,6 +10,7 @@ from Liquirizia.DataAccessObject.Implements.Redis.Types import *
 
 from json import dumps, loads
 from time import sleep
+from random import randint
 	
 
 class Redis(Case):
@@ -42,8 +43,9 @@ class Redis(Case):
 			{'k': 'sample', 'v': 1},
 			{'k': 'sample', 'v': 1.0},
 			{'k': 'sample', 'v': "Hello"},
-			# {'k': 'sample', 'v': (1,2,3)}, # TUPLE IS NOT SUPPORT
+			{'k': 'sample', 'v': (1,2,3)}, 
 			{'k': 'sample', 'v': [1,2,3]},
+			{'k': 'sample', 'v': {1,2,3}},
 			{'k': 'sample', 'v': {'a':1,'b':2}},
 	)	
 	@Order(2)
@@ -79,18 +81,25 @@ class Redis(Case):
 		con.delete('sample')
 		return
 
-	# @Order(5)
-	# def testList(self):
-	# 	con = Helper.Get('Sample')
-	# 	listType = List(con)
-	# 	_ = []
-	# 	for i in range(0, 5):
-	# 		listType.push('sample', i)
-	# 		_.append(str(i))
-	# 	_.reverse()
-	# 	ASSERT_IS_EQUAL_LIST(listType.get('sample'), _)
-	# 	con.delete('sample')
-	# 	return
+	@Order(5)
+	def testList(self):
+		con = Helper.Get('Sample')
+		v = [True, 1, 2, 4.0, 6.0, 'ABC', False]
+		_ = con.setList('sample', v)
+		ASSERT_IS_EQUAL_SEQUENCE(_, v)
+		_ = con.getList('sample')
+		ASSERT_IS_EQUAL_SEQUENCE(_, v)
+		_ = con.setList('sample')
+		v = []
+		for i in range(0, 5):
+			x = randint(i+1, (i+1)*100)
+			_.append(x)
+			v.append(x)
+		ASSERT_IS_EQUAL_SEQUENCE(_, v)
+		for i, __ in enumerate(_):
+			ASSERT_IS_EQUAL(_[i], v[i])
+		con.delete('sample')
+		return
 
 	# @Order(6)
 	# def testSet(self):
