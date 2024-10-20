@@ -33,17 +33,26 @@ if __name__ == '__main__':
 	con = Helper.Get('Sample')
 
 	# Get/Set Value
-	con.set('sample', json.dumps({
-		1: 1,
-		2: 2
-	}))
-	v = json.loads(con.get('sample'))
-	print(v, file=sys.stdout)
-	# Set Persist
+	_ = [
+		True, # boolean
+		False,
+		0, # integer
+		0.0, # float
+		'string', # string
+		(1,2,3), # tuple
+		[1,2,3], # list
+		set([1,2,3]), # set
+		{1:1,2:2,3:3}, # dict
+	]
+	for v in _:
+		con.set('sample', v)
+		print(con.get('sample'), file=sys.stdout)
+
+	## Set Persist
 	con.persist('sample')
-	# Set Expires
+	## Set Expires
 	con.expire('sample', 60)
-	# Delete Value
+	## Delete Value
 	con.delete('sample')
 
 	# List Type

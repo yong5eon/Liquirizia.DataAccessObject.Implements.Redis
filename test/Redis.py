@@ -38,6 +38,7 @@ class Redis(Case):
 
 	@Parameterized(
 			{'k': 'sample', 'v': True},
+			{'k': 'sample', 'v': False},
 			{'k': 'sample', 'v': 1},
 			{'k': 'sample', 'v': 1.0},
 			{'k': 'sample', 'v': "Hello"},
@@ -49,18 +50,9 @@ class Redis(Case):
 	def testSetGetDel(self, k, v):
 		con = Helper.Get('Sample')
 		# Get/Set Value
-		if isinstance(v, (bool, int, float)):
-			con.set(k, str(v))
-			_ = eval(con.get(k))
-			ASSERT_IS_EQUAL(v, _)
-		elif isinstance(v, str):
-			con.set(k, v)
-			_ = con.get(k)
-			ASSERT_IS_EQUAL(v, _)
-		else:
-			con.set(k, dumps(v))
-			_ = loads(con.get(k))
-			ASSERT_IS_EQUAL(v, _)
+		con.set(k, v)
+		_ = con.get(k)
+		ASSERT_IS_EQUAL(v, _)
 		con.delete(k)
 		ASSERT_IS_NONE(con.get(k))
 		return
@@ -68,7 +60,7 @@ class Redis(Case):
 	@Order(3)
 	def testPersist(self):
 		con = Helper.Get('Sample')
-		con.set('sample', '1')
+		con.set('sample', 1)
 		con.expire('sample', 3)
 		con.persist('sample')
 		sleep(5)
@@ -79,7 +71,7 @@ class Redis(Case):
 	@Order(4)
 	def testExpire(self):
 		con = Helper.Get('Sample')
-		con.set('sample', '1')
+		con.set('sample', 1)
 		con.persist('sample')
 		con.expire('sample', 3)
 		sleep(5)
