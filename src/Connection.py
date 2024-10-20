@@ -7,6 +7,8 @@ from .Configuration import Configuration
 
 from redis import Redis, ConnectionPool
 
+from typing import Sequence
+
 __all__ = (
 	'DataAccessObject'
 )
@@ -71,3 +73,11 @@ class Connection(BaseConnection, Cache):
 	def delete(self, key):
 		self.connection.delete(key)
 		return
+	
+	def setList(self, key, val: Sequence = None):
+		from .Types import List
+		return List(self, key, val if val else [])
+	
+	def getList(self, key):
+		from .Types import List
+		return List(self, key)

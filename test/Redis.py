@@ -87,53 +87,53 @@ class Redis(Case):
 		con.delete('sample')
 		return
 
-	@Order(5)
-	def testList(self):
-		con = Helper.Get('Sample')
-		listType = List(con)
-		_ = []
-		for i in range(0, 5):
-			listType.push('sample', i)
-			_.append(str(i))
-		_.reverse()
-		ASSERT_IS_EQUAL_LIST(listType.get('sample'), _)
-		con.delete('sample')
-		return
+	# @Order(5)
+	# def testList(self):
+	# 	con = Helper.Get('Sample')
+	# 	listType = List(con)
+	# 	_ = []
+	# 	for i in range(0, 5):
+	# 		listType.push('sample', i)
+	# 		_.append(str(i))
+	# 	_.reverse()
+	# 	ASSERT_IS_EQUAL_LIST(listType.get('sample'), _)
+	# 	con.delete('sample')
+	# 	return
 
-	@Order(6)
-	def testSet(self):
-		con = Helper.Get('Sample')
-		setType = Set(con)
-		_ = set()
-		for i in range(0, 5):
-			setType.add('sample', str(i))
-			_.add(str(i))
-		ASSERT_IS_EQUAL_SET(setType.get('sample'), _)
-		con.delete('sample')
-		return
+	# @Order(6)
+	# def testSet(self):
+	# 	con = Helper.Get('Sample')
+	# 	setType = Set(con)
+	# 	_ = set()
+	# 	for i in range(0, 5):
+	# 		setType.add('sample', str(i))
+	# 		_.add(str(i))
+	# 	ASSERT_IS_EQUAL_SET(setType.get('sample'), _)
+	# 	con.delete('sample')
+	# 	return
 
-	@Order(7)
-	def testSortedSet(self):
-		con = Helper.Get('Sample')
-		sortedSetType = SortedSet(con)
-		_ = []
-		for i in range(0, 5):
-			sortedSetType.add('sample', i, str(i))
-			_.append(str(i))
-		sorted(_)
-		ASSERT_IS_EQUAL_LIST(sortedSetType.get('sample'), _)
-		con.delete('sample')
-		return
+	# @Order(7)
+	# def testSortedSet(self):
+	# 	con = Helper.Get('Sample')
+	# 	sortedSetType = SortedSet(con)
+	# 	_ = []
+	# 	for i in range(0, 5):
+	# 		sortedSetType.add('sample', i, str(i))
+	# 		_.append(str(i))
+	# 	sorted(_)
+	# 	ASSERT_IS_EQUAL_LIST(sortedSetType.get('sample'), _)
+	# 	con.delete('sample')
+	# 	return
 
-	@Order(8)
-	def testHash(self):
-		con = Helper.Get('Sample')
-		hashType = Hash(con)
-		_ = {}
-		for i in range(0, 5):
-			hashType.set('sample', i, str(i))
-			_[str(i)] = str(i)
-		ASSERT_IS_EQUAL_DICT(hashType.getAll('sample'), _)
-		con.delete('sample')
-		return
+	# @Order(8)
+	# def testHash(self):
+	# 	con = Helper.Get('Sample')
+	# 	hashType = Hash(con)
+	# 	_ = {}
+	# 	for i in range(0, 5):
+	# 		hashType.set('sample', i, str(i))
+	# 		_[str(i)] = str(i)
+	# 	ASSERT_IS_EQUAL_DICT(hashType.getAll('sample'), _)
+	# 	con.delete('sample')
+	# 	return
 

@@ -9,6 +9,8 @@ from Liquirizia.DataAccessObject.Implements.Redis.Types import Set
 from Liquirizia.DataAccessObject.Implements.Redis.Types import SortedSet
 from Liquirizia.DataAccessObject.Implements.Redis.Types import Hash
 
+from random import randint
+
 import sys
 import json
 
@@ -31,50 +33,55 @@ if __name__ == '__main__':
 	con = Helper.Get('Sample')
 
 	# Get/Set Value
-	con.set('sample:sample', json.dumps({
+	con.set('sample', json.dumps({
 		1: 1,
 		2: 2
 	}))
-	v = json.loads(con.get('sample:sample'))
+	v = json.loads(con.get('sample'))
 	print(v, file=sys.stdout)
 	# Set Persist
-	con.persist('sample:sample')
+	con.persist('sample')
 	# Set Expires
-	con.expire('sample:sample', 60)
+	con.expire('sample', 60)
 	# Delete Value
-	con.delete('sample:sample')
+	con.delete('sample')
 
 	# List Type
-	listType = List(con)
+	_ = con.setList('sample', [0,1,2,3,4])
+	print(_, file=sys.stdout)
+	_ = con.getList('sample')
+	print(_, file=sys.stdout)
+	_ = con.setList('sample')
+	print(_, file=sys.stdout)
 	for i in range(0, 5):
-		listType.push('sample:list', i)
-		listType.push('sample:list', i)
-	v = listType.get('sample:list')
-	print(v, file=sys.stdout)
-	con.delete('sample:list')
+		_.append(randint(i, i*5))
+	print(_, file=sys.stdout)
+	_ = con.getList('sample')
+	print(_, file=sys.stdout)
+	con.delete('sample')
 
-	# Set Type
-	setType = Set(con)
-	for i in range(0, 5):
-		setType.add('sample:set', i)
-		setType.add('sample:set', i)
-	v = setType.get('sample:set')
-	print(v, file=sys.stdout)
-	con.delete('sample:set')
+	# # Set Type
+	# setType = Set(con)
+	# for i in range(0, 5):
+	# 	setType.add('sample:set', i)
+	# 	setType.add('sample:set', i)
+	# v = setType.get('sample:set')
+	# print(v, file=sys.stdout)
+	# con.delete('sample:set')
 
-	# SortedSet Type
-	sortedSetType = SortedSet(con)
-	for i in range(0, 5):
-		sortedSetType.add('sample:sortedSet', i, i)
-		sortedSetType.add('sample:sortedSet', i, i)
-	v = sortedSetType.get('sample:sortedSet')
-	print(v, file=sys.stdout)
-	con.delete('sample:sortedSet')
+	# # SortedSet Type
+	# sortedSetType = SortedSet(con)
+	# for i in range(0, 5):
+	# 	sortedSetType.add('sample:sortedSet', i, i)
+	# 	sortedSetType.add('sample:sortedSet', i, i)
+	# v = sortedSetType.get('sample:sortedSet')
+	# print(v, file=sys.stdout)
+	# con.delete('sample:sortedSet')
 
-	# Hash Type
-	hashType = Hash(con)
-	for i in range(0, 5):
-		hashType.set('sample:hash', i, i)
-	v = hashType.getAll('sample:hash')
-	print(v, file=sys.stdout)
-	con.delete('sample:hash')
+	# # Hash Type
+	# hashType = Hash(con)
+	# for i in range(0, 5):
+	# 	hashType.set('sample:hash', i, i)
+	# v = hashType.getAll('sample:hash')
+	# print(v, file=sys.stdout)
+	# con.delete('sample:hash')

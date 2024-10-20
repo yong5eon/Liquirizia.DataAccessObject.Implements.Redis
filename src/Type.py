@@ -12,6 +12,7 @@ __all__ = (
 class Type(BaseType):
 	"""Abstract Type Class for Redis"""
 
-	def __init__(self, con: Connection):
+	def __init__(self, con: Connection, key: str):
 		self.connection = con.connection
+		self.key = key
 		return
