@@ -12,7 +12,7 @@ class String(Type):
 
 	def set(self, key, value):
 		con = self.connection
-		con.set(key, value)
+		con.set(str(key), value)
 		return
 
 	def get(self, key):

@@ -32,63 +32,72 @@ if __name__ == '__main__':
 	con = Helper.Get('Sample')
 
 	# Get/Set Value
-	con.set('sample:sample', json.dumps({
-		1: 1,
-		2: 2
-	}))
-	v = json.loads(con.get('sample:sample'))
-	print(v, file=sys.stdout)
-	# Set Persist
-	con.persist('sample:sample')
-	# Set Expires
-	con.expire('sample:sample', 60)
-	# Delete Value
-	con.delete('sample:sample')
+	_ = [
+		True, # boolean
+		False,
+		0, # integer
+		0.0, # float
+		'string', # string
+		(1,2,3), # tuple
+		[1,2,3], # list
+		set([1,2,3]), # set
+		{1:1,2:2,3:3}, # dict
+	]
+	for v in _:
+		con.set('sample', v)
+		print(con.get('sample'), file=sys.stdout)
+
+	## Set Persist
+	con.persist('sample')
+	## Set Expires
+	con.expire('sample', 60)
+	## Delete Value
+	con.delete('sample')
 
 	# String Type
 	stringType = String(con)
-	stringType.set('sample:string', 'string')
-	v = stringType.get('sample:string')
+	stringType.set('sample', 'string')
+	v = stringType.get('sample')
 	print(v, file=sys.stdout)
-	v = stringType.getSet('sample:string', 'changed')
+	v = stringType.getSet('sample', 'changed')
 	print(v, file=sys.stdout)
-	v = stringType.get('sample:string')
+	v = stringType.get('sample')
 	print(v, file=sys.stdout)
-	v = stringType.len('sample:string')
+	v = stringType.len('sample')
 	print(v, file=sys.stdout)
-	con.delete('sample:string')
+	con.delete('sample')
 
 	# List Type
 	listType = List(con)
 	for i in range(0, 5):
-		listType.push('sample:list', i)
-		listType.push('sample:list', i)
-	v = listType.get('sample:list')
+		listType.push('sample', i)
+		listType.push('sample', i)
+	v = listType.get('sample')
 	print(v, file=sys.stdout)
-	con.delete('sample:list')
+	con.delete('sample')
 
 	# Set Type
 	setType = Set(con)
 	for i in range(0, 5):
-		setType.add('sample:set', i)
-		setType.add('sample:set', i)
-	v = setType.get('sample:set')
+		setType.add('sample', i)
+		setType.add('sample', i)
+	v = setType.get('sample')
 	print(v, file=sys.stdout)
-	con.delete('sample:set')
+	con.delete('sample')
 
 	# SortedSet Type
 	sortedSetType = SortedSet(con)
 	for i in range(0, 5):
-		sortedSetType.add('sample:sortedSet', i, i)
-		sortedSetType.add('sample:sortedSet', i, i)
-	v = sortedSetType.get('sample:sortedSet')
+		sortedSetType.add('sample', i, i)
+		sortedSetType.add('sample', i, i)
+	v = sortedSetType.get('sample')
 	print(v, file=sys.stdout)
-	con.delete('sample:sortedSet')
+	con.delete('sample')
 
 	# Hash Type
 	hashType = Hash(con)
 	for i in range(0, 5):
-		hashType.set('sample:hash', i, i)
-	v = hashType.getAll('sample:hash')
+		hashType.set('sample', i, i)
+	v = hashType.getAll('sample')
 	print(v, file=sys.stdout)
-	con.delete('sample:hash')
+	con.delete('sample')

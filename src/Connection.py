@@ -25,6 +25,8 @@ class Connection(BaseConnection, Cache):
 		else:
 			self.pool = None
 		self.connection = None
+		self.encode = conf.encoder
+		self.decode = conf.decoder
 		return
 
 	def __del__(self):
@@ -44,30 +46,32 @@ class Connection(BaseConnection, Cache):
 		return
 
 	def keys(self, key):
-		return self.connection.keys(key)
+		return self.connection.keys(str(key))
 
 	def exists(self, key):
-		return self.connection.exists(key)
+		return self.connection.exists(str(key))
 
 	def set(self, key, value, expires=None):
-		self.connection.set(key, value)
+		v = self.encode(value)
+		self.connection.set(str(key), v)
+		# self.connection.set(str(key), self.encode(value))
 		if expires:
-			self.connection.expire(key, expires)
+			self.connection.expire(str(key), expires)
 		else:
-			self.connection.persist(key)
+			self.connection.persist(str(key))
 		return
 
 	def get(self, key):
-		return self.connection.get(key)
+		return self.decode(self.connection.get(str(key)))
 
 	def expire(self, key, seconds):
-		self.connection.expire(key, seconds)
+		self.connection.expire(str(key), seconds)
 		return
 
 	def persist(self, key):
-		self.connection.persist(key)
+		self.connection.persist(str(key))
 		return
 
 	def delete(self, key):
-		self.connection.delete(key)
+		self.connection.delete(str(key))
 		return
