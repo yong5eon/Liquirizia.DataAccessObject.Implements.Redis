@@ -52,9 +52,7 @@ class Connection(BaseConnection, Cache):
 		return self.connection.exists(str(key))
 
 	def set(self, key, value, expires=None):
-		v = self.encode(value)
-		self.connection.set(str(key), v)
-		# self.connection.set(str(key), self.encode(value))
+		self.connection.set(str(key), self.encode(value))
 		if expires:
 			self.connection.expire(str(key), expires)
 		else:
