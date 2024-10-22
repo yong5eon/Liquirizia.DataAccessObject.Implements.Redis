@@ -71,28 +71,58 @@ if __name__ == '__main__':
 		print(v, file=sys.stdout)
 	con.delete('sample')
 
-	# # Set Type
-	# setType = Set(con)
-	# for i in range(0, 5):
-	# 	setType.add('sample:set', i)
-	# 	setType.add('sample:set', i)
-	# v = setType.get('sample:set')
-	# print(v, file=sys.stdout)
-	# con.delete('sample:set')
+	# Set Type
+	_ = con.setSet('sample', {0,1,2,3,4})
+	print(_, file=sys.stdout)
+	_ = con.getSet('sample')
+	print(_, file=sys.stdout)
+	_ = con.setSet('sample')
+	print(_, file=sys.stdout)
+	for i in range(0, 5):
+		_.add(randint(i, i*5))
+	print(_, file=sys.stdout)
+	_ = con.getSet('sample')
+	print(_, file=sys.stdout)
+	for v in _:
+		print(v, file=sys.stdout)
+	con.delete('sample')
 
-	# # SortedSet Type
-	# sortedSetType = SortedSet(con)
-	# for i in range(0, 5):
-	# 	sortedSetType.add('sample:sortedSet', i, i)
-	# 	sortedSetType.add('sample:sortedSet', i, i)
-	# v = sortedSetType.get('sample:sortedSet')
-	# print(v, file=sys.stdout)
-	# con.delete('sample:sortedSet')
+	# SortedSet Type
+	_ = con.setSortedSet('sample', {0,1,4,2,3})
+	print(_, file=sys.stdout)
+	_ = con.getSortedSet('sample')
+	print(_, file=sys.stdout)
+	_ = con.setSortedSet('sample')
+	print(_, file=sys.stdout)
+	for i in range(0, 5):
+		_.add(randint(i, i*5))
+	print(_, file=sys.stdout)
+	_ = con.getSortedSet('sample')
+	print(_, file=sys.stdout)
+	for v in _:
+		print(v, file=sys.stdout)
+	con.delete('sample')
 
-	# # Hash Type
-	# hashType = Hash(con)
-	# for i in range(0, 5):
-	# 	hashType.set('sample:hash', i, i)
-	# v = hashType.getAll('sample:hash')
-	# print(v, file=sys.stdout)
-	# con.delete('sample:hash')
+	# Hash Type
+	__ = {
+		'a': True,
+		'b': 1,
+		'c': 0.0,
+		'd': (1,2,3),
+		'e': [1,2,3],
+		'f': {'a': False, 'b': 0, 'c': 1.0},
+	}
+	_ = con.setHash('sample', __)
+	print(_, file=sys.stdout)
+	_ = con.getHash('sample')
+	print(_, file=sys.stdout)
+	_ = con.setHash('sample')
+	print(_, file=sys.stdout)
+	for k, v in __.items():
+		_[k] = v
+	print(_, file=sys.stdout)
+	_ = con.getHash('sample')
+	print(_, file=sys.stdout)
+	for k, v in _.items():
+		print(k, v, file=sys.stdout)
+	con.delete('sample')
