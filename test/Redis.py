@@ -101,40 +101,69 @@ class Redis(Case):
 		con.delete('sample')
 		return
 
-	# @Order(6)
-	# def testSet(self):
-	# 	con = Helper.Get('Sample')
-	# 	setType = Set(con)
-	# 	_ = set()
-	# 	for i in range(0, 5):
-	# 		setType.add('sample', str(i))
-	# 		_.add(str(i))
-	# 	ASSERT_IS_EQUAL_SET(setType.get('sample'), _)
-	# 	con.delete('sample')
-	# 	return
+	@Order(6)
+	def testSet(self):
+		con = Helper.Get('Sample')
+		v = set()
+		for i in range(0, 10):
+			x = randint(i+1, (i+1)*100)
+			v.add(x)
+		_ = sorted(con.setSet('sample', v))
+		ASSERT_IS_EQUAL_SEQUENCE(_, sorted(v))
+		_ = sorted(con.getSet('sample'))
+		ASSERT_IS_EQUAL_SEQUENCE(_, sorted(v))
+		_ = con.setSet('sample')
+		v = set()
+		for i in range(0, 10):
+			x = randint(i+1, (i+1)*100)
+			v.add(x)
+			_.add(x)
+		_ = sorted(con.getSet('sample'))
+		ASSERT_IS_EQUAL_SEQUENCE(_, sorted(v))
+		con.delete('sample')
+		return
 
-	# @Order(7)
-	# def testSortedSet(self):
-	# 	con = Helper.Get('Sample')
-	# 	sortedSetType = SortedSet(con)
-	# 	_ = []
-	# 	for i in range(0, 5):
-	# 		sortedSetType.add('sample', i, str(i))
-	# 		_.append(str(i))
-	# 	sorted(_)
-	# 	ASSERT_IS_EQUAL_LIST(sortedSetType.get('sample'), _)
-	# 	con.delete('sample')
-	# 	return
+	@Order(7)
+	def testSortedSet(self):
+		con = Helper.Get('Sample')
+		v = set()
+		for i in range(0, 10):
+			x = randint(i+1, (i+1)*100)
+			v.add(x)
+		_ = sorted(con.setSortedSet('sample', v))
+		ASSERT_IS_EQUAL_SEQUENCE(_, sorted(v))
+		_ = sorted(con.getSortedSet('sample'))
+		ASSERT_IS_EQUAL_SEQUENCE(_, sorted(v))
+		_ = con.setSortedSet('sample')
+		v = set()
+		for i in range(0, 10):
+			x = randint(i+1, (i+1)*100)
+			v.add(x)
+			_.add(x)
+		_ = sorted(con.getSortedSet('sample'))
+		ASSERT_IS_EQUAL_SEQUENCE(_, sorted(v))
+		con.delete('sample')
+		return
 
-	# @Order(8)
-	# def testHash(self):
-	# 	con = Helper.Get('Sample')
-	# 	hashType = Hash(con)
-	# 	_ = {}
-	# 	for i in range(0, 5):
-	# 		hashType.set('sample', i, str(i))
-	# 		_[str(i)] = str(i)
-	# 	ASSERT_IS_EQUAL_DICT(hashType.getAll('sample'), _)
-	# 	con.delete('sample')
-	# 	return
-
+	@Order(8)
+	def testHash(self):
+		from copy import deepcopy
+		con = Helper.Get('Sample')
+		v = {
+			'a': True,
+			'b': 1,
+			'c': 0.0,
+			'd': (1,2,3),
+			'e': [1,2,3],
+			'f': {'a': False, 'b': 0, 'c': 1.0},
+		}
+		_ = con.setHash('sample', v)
+		ASSERT_IS_EQUAL_DICT(deepcopy(_), v)
+		_ = con.getHash('sample')
+		ASSERT_IS_EQUAL_DICT(deepcopy(_), v)
+		_ = con.setHash('sample')
+		for k, va in v.items():
+			_[k] = va
+		_ = con.getHash('sample')
+		ASSERT_IS_EQUAL_DICT(deepcopy(_), v)
+		con.delete('sample')
