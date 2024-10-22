@@ -5,9 +5,9 @@ from Liquirizia.DataAccessObject.Properties.Cache import Cache
 
 from .Configuration import Configuration
 
-from redis import Redis, ConnectionPool
+from collections.abc import Sequence, Set, Mapping
 
-from typing import Sequence, Set, Mapping
+from redis import Redis, ConnectionPool
 
 __all__ = (
 	'DataAccessObject'
