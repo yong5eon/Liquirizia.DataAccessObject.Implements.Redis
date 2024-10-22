@@ -5,6 +5,8 @@ from Liquirizia.DataAccessObject.Properties.Cache import Cache
 
 from .Configuration import Configuration
 
+from collections.abc import Sequence, Set, Mapping
+
 from redis import Redis, ConnectionPool
 
 __all__ = (
@@ -14,10 +16,6 @@ __all__ = (
 
 class Connection(BaseConnection, Cache):
 	"""Connection Class for Redis"""
-	"""
-	TODO :
-		* Exception Handling with Error of DataAccessObject
-	"""
 
 	def __init__(self, conf: Configuration):
 		if conf.persist:
@@ -73,3 +71,35 @@ class Connection(BaseConnection, Cache):
 	def delete(self, key):
 		self.connection.delete(str(key))
 		return
+	
+	def setList(self, key, val: Sequence = None) -> Sequence:
+		from .Types import List
+		return List(self, key, val if val else [])
+	
+	def getList(self, key) -> Sequence:
+		from .Types import List
+		return List(self, key)
+
+	def setSet(self, key, val: Set = None) -> Set:
+		from .Types import Set
+		return Set(self, key, val if val else [])
+	
+	def getSet(self, key) -> Set:
+		from .Types import Set
+		return Set(self, key)
+
+	def setSortedSet(self, key, val: Set = None) -> Set:
+		from .Types import SortedSet
+		return SortedSet(self, key, val if val else [])
+	
+	def getSortedSet(self, key) -> Set:
+		from .Types import SortedSet
+		return SortedSet(self, key)
+
+	def setHash(self, key, val: Mapping= None) -> Mapping:
+		from .Types import Hash 
+		return Hash(self, key, val if val else {})
+	
+	def getHash(self, key) -> Mapping:
+		from .Types import Hash
+		return Hash(self, key)

@@ -4,11 +4,12 @@ from Liquirizia.DataAccessObject import Helper
 
 from Liquirizia.DataAccessObject.Implements.Redis import Connection, Configuration
 
-from Liquirizia.DataAccessObject.Implements.Redis.Types import String
 from Liquirizia.DataAccessObject.Implements.Redis.Types import List
 from Liquirizia.DataAccessObject.Implements.Redis.Types import Set
 from Liquirizia.DataAccessObject.Implements.Redis.Types import SortedSet
 from Liquirizia.DataAccessObject.Implements.Redis.Types import Hash
+
+from random import randint
 
 import sys
 import json
@@ -54,50 +55,74 @@ if __name__ == '__main__':
 	## Delete Value
 	con.delete('sample')
 
-	# String Type
-	stringType = String(con)
-	stringType.set('sample', 'string')
-	v = stringType.get('sample')
-	print(v, file=sys.stdout)
-	v = stringType.getSet('sample', 'changed')
-	print(v, file=sys.stdout)
-	v = stringType.get('sample')
-	print(v, file=sys.stdout)
-	v = stringType.len('sample')
-	print(v, file=sys.stdout)
-	con.delete('sample')
-
 	# List Type
-	listType = List(con)
+	_ = con.setList('sample', [0,1,2,3,4])
+	print(_, file=sys.stdout)
+	_ = con.getList('sample')
+	print(_, file=sys.stdout)
+	_ = con.setList('sample')
+	print(_, file=sys.stdout)
 	for i in range(0, 5):
-		listType.push('sample', i)
-		listType.push('sample', i)
-	v = listType.get('sample')
-	print(v, file=sys.stdout)
+		_.append(randint(i, i*5))
+	print(_, file=sys.stdout)
+	_ = con.getList('sample')
+	print(_, file=sys.stdout)
+	for v in _:
+		print(v, file=sys.stdout)
 	con.delete('sample')
 
 	# Set Type
-	setType = Set(con)
+	_ = con.setSet('sample', {0,1,2,3,4})
+	print(_, file=sys.stdout)
+	_ = con.getSet('sample')
+	print(_, file=sys.stdout)
+	_ = con.setSet('sample')
+	print(_, file=sys.stdout)
 	for i in range(0, 5):
-		setType.add('sample', i)
-		setType.add('sample', i)
-	v = setType.get('sample')
-	print(v, file=sys.stdout)
+		_.add(randint(i, i*5))
+	print(_, file=sys.stdout)
+	_ = con.getSet('sample')
+	print(_, file=sys.stdout)
+	for v in _:
+		print(v, file=sys.stdout)
 	con.delete('sample')
 
 	# SortedSet Type
-	sortedSetType = SortedSet(con)
+	_ = con.setSortedSet('sample', {0,1,4,2,3})
+	print(_, file=sys.stdout)
+	_ = con.getSortedSet('sample')
+	print(_, file=sys.stdout)
+	_ = con.setSortedSet('sample')
+	print(_, file=sys.stdout)
 	for i in range(0, 5):
-		sortedSetType.add('sample', i, i)
-		sortedSetType.add('sample', i, i)
-	v = sortedSetType.get('sample')
-	print(v, file=sys.stdout)
+		_.add(randint(i, i*5))
+	print(_, file=sys.stdout)
+	_ = con.getSortedSet('sample')
+	print(_, file=sys.stdout)
+	for v in _:
+		print(v, file=sys.stdout)
 	con.delete('sample')
 
 	# Hash Type
-	hashType = Hash(con)
-	for i in range(0, 5):
-		hashType.set('sample', i, i)
-	v = hashType.getAll('sample')
-	print(v, file=sys.stdout)
+	__ = {
+		'a': True,
+		'b': 1,
+		'c': 0.0,
+		'd': (1,2,3),
+		'e': [1,2,3],
+		'f': {'a': False, 'b': 0, 'c': 1.0},
+	}
+	_ = con.setHash('sample', __)
+	print(_, file=sys.stdout)
+	_ = con.getHash('sample')
+	print(_, file=sys.stdout)
+	_ = con.setHash('sample')
+	print(_, file=sys.stdout)
+	for k, v in __.items():
+		_[k] = v
+	print(_, file=sys.stdout)
+	_ = con.getHash('sample')
+	print(_, file=sys.stdout)
+	for k, v in _.items():
+		print(k, v, file=sys.stdout)
 	con.delete('sample')

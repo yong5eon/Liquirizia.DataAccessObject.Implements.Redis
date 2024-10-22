@@ -34,7 +34,7 @@ setup(
 	],
 	install_requires=[
 		'Liquirizia@git+https://github.com/yong5eon/Liquirizia',
-		'redis>=3.5.3',
+		'redis>=5.1.1',
 	],
 	python_requires='>=3.8'
 )

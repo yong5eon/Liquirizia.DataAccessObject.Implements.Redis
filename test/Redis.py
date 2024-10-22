@@ -10,6 +10,7 @@ from Liquirizia.DataAccessObject.Implements.Redis.Types import *
 
 from json import dumps, loads
 from time import sleep
+from random import randint
 	
 
 class Redis(Case):
@@ -42,8 +43,9 @@ class Redis(Case):
 			{'k': 'sample', 'v': 1},
 			{'k': 'sample', 'v': 1.0},
 			{'k': 'sample', 'v': "Hello"},
-			# {'k': 'sample', 'v': (1,2,3)}, # TUPLE IS NOT SUPPORT
+			{'k': 'sample', 'v': (1,2,3)}, 
 			{'k': 'sample', 'v': [1,2,3]},
+			{'k': 'sample', 'v': {1,2,3}},
 			{'k': 'sample', 'v': {'a':1,'b':2}},
 	)	
 	@Order(2)
@@ -80,64 +82,88 @@ class Redis(Case):
 		return
 
 	@Order(5)
-	def testString(self):
+	def testList(self):
 		con = Helper.Get('Sample')
-		stringType = String(con)
-		stringType.set('sample', 'string')
-		ASSERT_IS_EQUAL(stringType.get('sample'), 'string')
-		ASSERT_IS_EQUAL(stringType.getSet('sample', 'changed'), 'string')
-		ASSERT_IS_EQUAL(stringType.get('sample'), 'changed')
-		ASSERT_IS_EQUAL(stringType.len('sample'), 7)
+		v = [True, 1, 2, 4.0, 6.0, 'ABC', False]
+		_ = con.setList('sample', v)
+		ASSERT_IS_EQUAL_SEQUENCE(_, v)
+		_ = con.getList('sample')
+		ASSERT_IS_EQUAL_SEQUENCE(_, v)
+		_ = con.setList('sample')
+		v = []
+		for i in range(0, 5):
+			x = randint(i+1, (i+1)*100)
+			_.append(x)
+			v.append(x)
+		ASSERT_IS_EQUAL_SEQUENCE(_, v)
+		for i, __ in enumerate(_):
+			ASSERT_IS_EQUAL(_[i], v[i])
 		con.delete('sample')
 		return
 
 	@Order(6)
-	def testList(self):
+	def testSet(self):
 		con = Helper.Get('Sample')
-		listType = List(con)
-		_ = []
-		for i in range(0, 5):
-			listType.push('sample', i)
-			_.append(str(i))
-		_.reverse()
-		ASSERT_IS_EQUAL_LIST(listType.get('sample'), _)
+		v = set()
+		for i in range(0, 10):
+			x = randint(i+1, (i+1)*100)
+			v.add(x)
+		_ = sorted(con.setSet('sample', v))
+		ASSERT_IS_EQUAL_SEQUENCE(_, sorted(v))
+		_ = sorted(con.getSet('sample'))
+		ASSERT_IS_EQUAL_SEQUENCE(_, sorted(v))
+		_ = con.setSet('sample')
+		v = set()
+		for i in range(0, 10):
+			x = randint(i+1, (i+1)*100)
+			v.add(x)
+			_.add(x)
+		_ = sorted(con.getSet('sample'))
+		ASSERT_IS_EQUAL_SEQUENCE(_, sorted(v))
 		con.delete('sample')
 		return
 
 	@Order(7)
-	def testSet(self):
+	def testSortedSet(self):
 		con = Helper.Get('Sample')
-		setType = Set(con)
-		_ = set()
-		for i in range(0, 5):
-			setType.add('sample', str(i))
-			_.add(str(i))
-		ASSERT_IS_EQUAL_SET(setType.get('sample'), _)
+		v = set()
+		for i in range(0, 10):
+			x = randint(i+1, (i+1)*100)
+			v.add(x)
+		_ = sorted(con.setSortedSet('sample', v))
+		ASSERT_IS_EQUAL_SEQUENCE(_, sorted(v))
+		_ = sorted(con.getSortedSet('sample'))
+		ASSERT_IS_EQUAL_SEQUENCE(_, sorted(v))
+		_ = con.setSortedSet('sample')
+		v = set()
+		for i in range(0, 10):
+			x = randint(i+1, (i+1)*100)
+			v.add(x)
+			_.add(x)
+		_ = sorted(con.getSortedSet('sample'))
+		ASSERT_IS_EQUAL_SEQUENCE(_, sorted(v))
 		con.delete('sample')
 		return
 
 	@Order(8)
-	def testSortedSet(self):
-		con = Helper.Get('Sample')
-		sortedSetType = SortedSet(con)
-		_ = []
-		for i in range(0, 5):
-			sortedSetType.add('sample', i, str(i))
-			_.append(str(i))
-		sorted(_)
-		ASSERT_IS_EQUAL_LIST(sortedSetType.get('sample'), _)
-		con.delete('sample')
-		return
-
-	@Order(9)
 	def testHash(self):
+		from copy import deepcopy
 		con = Helper.Get('Sample')
-		hashType = Hash(con)
-		_ = {}
-		for i in range(0, 5):
-			hashType.set('sample', i, str(i))
-			_[str(i)] = str(i)
-		ASSERT_IS_EQUAL_DICT(hashType.getAll('sample'), _)
+		v = {
+			'a': True,
+			'b': 1,
+			'c': 0.0,
+			'd': (1,2,3),
+			'e': [1,2,3],
+			'f': {'a': False, 'b': 0, 'c': 1.0},
+		}
+		_ = con.setHash('sample', v)
+		ASSERT_IS_EQUAL_DICT(deepcopy(_), v)
+		_ = con.getHash('sample')
+		ASSERT_IS_EQUAL_DICT(deepcopy(_), v)
+		_ = con.setHash('sample')
+		for k, va in v.items():
+			_[k] = va
+		_ = con.getHash('sample')
+		ASSERT_IS_EQUAL_DICT(deepcopy(_), v)
 		con.delete('sample')
-		return
-
