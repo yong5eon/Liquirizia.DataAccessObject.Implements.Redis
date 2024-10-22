@@ -26,26 +26,30 @@ class SortedSet(Type, MutableSet):
 		return
 	
 	def __repr__(self):
-		_ = list(self.connection.zrange(self.key, 0, -1))
-		for i, v in enumerate(_): _[i] = self.decode(v)
-		return _.__repr__()
+		__ = set()
+		_ = self.connection.zrange(self.key, 0, -1)
+		for v in _: __.add(self.decode(v))
+		__ = sorted(__)
+		return __.__repr__()
 	
 	def __str__(self):
-		_ = list(self.connection.zrange(self.key, 0, -1))
-		for i, v in enumerate(_): _[i] = self.decode(v)
-		_ = set(_)
-		return _.__str__()
+		__ = set()
+		_ = self.connection.zrange(self.key, 0, -1)
+		for v in _: __.add(self.decode(v))
+		__ = sorted(__)
+		return __.__str__()
 
 	def __contains__(self, value):
-		_ = list(self.connection.zrange(self.key, 0, -1))
+		_ = self.connection.zrange(self.key, 0, -1)
 		return value in _
 	
 	def __iter__(self):
-		_ = list(self.connection.zrange(self.key, 0, -1))
-		for i, v in enumerate(_): _[i] = self.decode(v)
-		_ = set(_)
-		return _.__iter__()
-	
+		__ = set()
+		_ = self.connection.zrange(self.key, 0, -1)
+		for v in _: __.add(self.decode(v))
+		__ = sorted(__)
+		return __.__iter__()
+
 	def __len__(self):
 		return self.connection.zcard(self.key)
 	

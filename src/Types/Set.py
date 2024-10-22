@@ -22,24 +22,25 @@ class Set(Type, MutableSet):
 		return
 	
 	def __repr__(self):
-		_ = list(self.connection.smembers(self.key))
-		for i, v in enumerate(_): _[i] = self.decode(v)
-		return _.__repr__()
+		__ = set()
+		_ = self.connection.smembers(self.key)
+		for v in _: __.add(self.decode(v))
+		return __.__repr__()
 	
 	def __str__(self):
-		_ = list(self.connection.smembers(self.key))
-		for i, v in enumerate(_): _[i] = self.decode(v)
-		_ = set(_)
-		return _.__str__()
+		__ = set()
+		_ = self.connection.smembers(self.key)
+		for v in _: __.add(self.decode(v))
+		return __.__str__()
 
 	def __contains__(self, value):
 		return self.connection.sismember(self.key, self.encode(value))
 	
 	def __iter__(self):
-		_ = list(self.connection.smembers(self.key))
-		for i, v in enumerate(_): _[i] = self.decode(v)
-		_ = set(_)
-		return _.__iter__()
+		__ = set()
+		_ = self.connection.smembers(self.key)
+		for v in _: __.add(self.decode(v))
+		return __.__iter__()
 	
 	def __len__(self):
 		return self.connection.scard(self.key)
