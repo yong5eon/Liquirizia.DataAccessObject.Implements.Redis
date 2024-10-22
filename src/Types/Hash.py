@@ -61,6 +61,16 @@ class Hash(Type, MutableMapping):
 		for k, v in _.items(): _[k] = self.decode(v)
 		return _.__ne__(value)
 	
+	def __copy__(self):
+		_ = self.connection.hgetall(self.key)
+		for k, v in _.items(): _[k] = self.decode(v)
+		return _
+
+	def __deepcopy__(self, memo):
+		_ = self.connection.hgetall(self.key)
+		for k, v in _.items(): _[k] = self.decode(v)
+		return _
+	
 	def keys(self):
 		return self.connection.hkeys(self.key)
 
