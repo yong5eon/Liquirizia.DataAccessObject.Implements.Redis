@@ -24,10 +24,13 @@ jobs:
         run: docker image build --file=res/Redis.7.docker.yml --tag=redis:7 .
       - name: Run Redis
         run: docker container run --name=redis --detach --publish=6379:6379 redis:7
-      - name: Run Redis Cluster
+      - name: Install Docker Compose
         run: curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+      - name: Chmod Docker Compose
         run: chmod +x /usr/local/bin/docker-compose 
+      - nanme: Verify Docker Compose
         run: docker-compose --version
+      - name: Run Redis Cluster
         run: docker-compose -p redis-cluster -f res/Redis.7.Cluster.docker-compose.yml up -d
       - name: Check Redis docker
         run: docker logs redis
