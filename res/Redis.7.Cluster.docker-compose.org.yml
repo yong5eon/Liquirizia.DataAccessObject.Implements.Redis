@@ -1,0 +1,52 @@
+networks:
+  redis-cluster:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.70.0.0/16
+          gateway: 172.70.0.1
+services:
+  redis-cluster-0:
+    image: redis:7
+    container_name: redis-cluster-0
+    volumes: 
+      - ./Redis.7.cluster.conf:/etc/redis/redis.conf
+    command: redis-server /etc/redis/redis.conf
+    ports:
+      - 7000:7000
+    networks:
+      redis-cluster:
+        ipv4_address: 172.70.0.20
+  redis-cluster-1:
+    image: redis:7
+    container_name: redis-cluster-1
+    volumes:
+      - ./Redis.7.cluster.conf:/etc/redis/redis.conf
+    command: redis-server /etc/redis/redis.conf
+    ports:
+      - 7001:7000
+    networks:
+      redis-cluster:
+        ipv4_address: 172.70.0.21
+  redis-cluster-2:
+    image: redis:7
+    container_name: redis-cluster-2
+    volumes:
+      - ./Redis.7.cluster.conf:/etc/redis/redis.conf
+    command: redis-server /etc/redis/redis.conf
+    ports:
+      - 7002:7000
+    networks:
+      redis-cluster:
+        ipv4_address: 172.70.0.22
+  redis-cluster-builder:
+    image: redis:7
+    container_name: redis-cluster-builder
+    command: redis-cli --cluster create 172.70.0.20:7000 172.70.0.21:7001 172.70.0.22:7002 --cluster-yes
+    networks:
+      redis-cluster:
+        ipv4_address: 172.70.0.100
+    depends_on:
+      - redis-cluster-0
+      - redis-cluster-1
+      - redis-cluster-2

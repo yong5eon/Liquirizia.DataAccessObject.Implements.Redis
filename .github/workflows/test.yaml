@@ -24,6 +24,8 @@ jobs:
         run: docker image build --file=res/Redis.7.docker.yml --tag=redis:7 .
       - name: Run Redis
         run: docker container run --name=redis --detach --publish=6379:6379 redis:7
+      - name: Run Redis Cluster
+        run: docker-compose -p redis-cluster -f res/Redis.7.Cluster.docker-compose.yml up -d
       - name: Check Redis docker
         run: docker logs redis
       - name: Test Redis

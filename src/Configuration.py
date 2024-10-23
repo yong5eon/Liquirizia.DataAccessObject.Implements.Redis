@@ -8,9 +8,17 @@ from .Serializers.Text import (
 	Decoder as Decoder,
 )
 
+from enum import Enum, auto
+
 __all__ = (
-	'Configuration'
+	'Configuration',
+	'ConnectionType',
 )
+
+
+class ConnectionType(Enum):
+	Pool = auto()
+	Cluster = auto()
 
 
 class Configuration(BaseConfiguration):
@@ -18,12 +26,12 @@ class Configuration(BaseConfiguration):
 
 	def __init__(
 		self,
-		host,
-		port=6379,
-		username=None,
-		password=None,
-		max=3,
-		persistent=True,
+		host: str,
+		port: int = 6379,
+		username: str = None,
+		password: str = None,
+		type: ConnectionType = None,
+		max: int = 3,
 		encoder: Serializer = Encoder(),
 		decoder: Serializer = Decoder(),
 	):
@@ -31,8 +39,8 @@ class Configuration(BaseConfiguration):
 		self.port = port
 		self.user = username
 		self.password = password
+		self.type = type
 		self.max = max
-		self.persist = persistent
 		self.encoder = encoder
 		self.decoder = decoder
 		return
