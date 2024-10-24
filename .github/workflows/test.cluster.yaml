@@ -1,5 +1,11 @@
 name: Test Liquirizia.DataAccessObject.Implements.Redis with Cluster
-on: push
+on: 
+  push:
+    pathes:
+      - src/**
+      - test/RedisCluster.py
+      - res/**
+      - .github/workflows/test.cluster.yml
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,10 +35,16 @@ jobs:
       - name: Set System Ctrl
         run: sysctl vm.overcommit_memory=1
       - name: Build Redis
-        run: docker-compose -f res/Redis.7.Cluster.docker-compose.yml build 
+        run: docker image build --file=res/Redis.7.docker.yml --tag=redis:7 .
+      - name: Build Redis Cluster Node - 0
+        run: docker image build --file=res/Redis.7.Cluster.0.docker.yml --tag=redis-cluster-0:7 .
+      - name: Build Redis Cluster Node - 1
+        run: docker image build --file=res/Redis.7.Cluster.1.docker.yml --tag=redis-cluster-1:7 .
+      - name: Build Redis Cluster Node - 2
+        run: docker image build --file=res/Redis.7.Cluster.2.docker.yml --tag=redis-cluster-2:7 .
       - name: Run Redis Cluster
         run: docker-compose -p redis-cluster -f res/Redis.7.Cluster.docker-compose.yml up -d
-      - name: Check Redis Cluster Node -  0
+      - name: Check Redis Cluster Node - 0
         run: docker logs redis-cluster-0 
       - name: Check Redis Cluster Node - 1
         run: docker logs redis-cluster-1 

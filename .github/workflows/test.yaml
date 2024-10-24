@@ -1,5 +1,11 @@
 name: Test Liquirizia.DataAccessObject.Implements.Redis
-on: push
+on: 
+  push:
+    pathes:
+      - src/**
+      - test/Redis.py
+      - res/Redis.7.docker.yml
+      - .github/workflows/test.yml
 jobs:
   build:
     runs-on: ubuntu-latest
