@@ -51,7 +51,7 @@ jobs:
       - name: Check Redis Cluster Node - 2
         run: docker logs redis-cluster-2 
       - name: Check Redis Cluster Builder
-        run: docker logs redis-cluster-builder
+        run: docker logs redis-cluster-builder 2>&1
       - name: Test Redis
         run: python -m Liquirizia.Test test --pattern=RedisCluster.py
       - name: Stop Redis Cluster
