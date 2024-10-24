@@ -49,7 +49,7 @@ jobs:
       - name: Check Redis Cluster Node - 1
         run: docker logs redis-cluster-1 
       - name: Check Redis Cluster Node - 2
-        run: docker logs redis-cluster-1 
+        run: docker logs redis-cluster-2 
       - name: Check Redis Cluster Builder
         run: docker logs redis-cluster-builder
       - name: Test Redis
