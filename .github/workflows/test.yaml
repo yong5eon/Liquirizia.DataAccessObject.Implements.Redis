@@ -35,7 +35,11 @@ jobs:
       - name: Run Redis Cluster
         run: docker-compose -p redis-cluster -f res/Redis.7.Cluster.docker-compose.yml up -d
       - name: Check Redis Cluster docker
-        run: docker logs redis-cluster
+        run: |
+          docker logs redis-cluster-0 
+          docker logs redis-cluster-1 
+          docker logs redis-cluster-2
+          docker logs redis-cluster-builder 
       - name: Test Redis
         run: python -m Liquirizia.Test test
       - name: Stop Redis
