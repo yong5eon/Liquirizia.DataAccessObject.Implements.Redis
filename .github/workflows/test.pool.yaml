@@ -1,4 +1,4 @@
-name: Test Liquirizia.DataAccessObject.Implements.Redis
+name: Test Liquirizia.DataAccessObject.Implements.Redis with Pool
 on: push
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
       - name: Check Redis docker
         run: docker logs redis
       - name: Test Redis
-        run: python -m Liquirizia.Test test --pattern=Redis.py
+        run: python -m Liquirizia.Test test --pattern=RedisPool.py
       - name: Stop Redis
         run: docker container stop redis
 

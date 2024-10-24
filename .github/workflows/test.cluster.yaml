@@ -1,0 +1,45 @@
+name: Test Liquirizia.DataAccessObject.Implements.Redis with Cluster
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{matrix.python-version}}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{matrix.python-version}} 
+      - name: Show Python Verison
+        run: python -c "import sys; print(sys.version)"
+      - name: Install Docker Compose
+        run: curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+      - name: Chmod Docker Compose
+        run: chmod +x /usr/local/bin/docker-compose 
+      - name: Verify Docker Compose
+        run: docker-compose --version
+      - name: Install pip 
+        run: python -m pip install --upgrade pip
+      - name: Install requirements
+        run: pip install --upgrade setuptools wheel ruff
+      - name: Install Packages
+        run: pip install --upgrade .
+      - name: Build Redis
+        run: docker image build --file=res/Redis.7.docker.yml --tag=redis:7 .
+      - name: Run Redis Cluster
+        run: docker-compose -p redis-cluster -f res/Redis.7.Cluster.docker-compose.yml up -d
+      - name: Check Redis Cluster Node -  0
+        run: docker logs redis-cluster-0 
+      - name: Check Redis Cluster Node - 1
+        run: docker logs redis-cluster-1 
+      - name: Check Redis Cluster Node - 2
+        run: docker logs redis-cluster-1 
+      - name: Check Redis Cluster Builder
+        run: docker logs redis-cluster-builder
+      - name: Test Redis
+        run: python -m Liquirizia.Test test --pattern=RedisCluster.py
+      - name: Stop Redis Cluster
+        run: docker container stop redis-cluster
+
