@@ -20,40 +20,28 @@ jobs:
           python-version: ${{matrix.python-version}} 
       - name: Show Python Verison
         run: python -c "import sys; print(sys.version)"
-      - name: Install Docker Compose
-        run: curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-      - name: Chmod Docker Compose
-        run: chmod +x /usr/local/bin/docker-compose 
-      - name: Verify Docker Compose
-        run: docker-compose --version
       - name: Install pip 
         run: python -m pip install --upgrade pip
       - name: Install requirements
         run: pip install --upgrade setuptools wheel ruff
       - name: Install Packages
         run: pip install --upgrade .
-      - name: Set System Ctrl
-        run: sysctl vm.overcommit_memory=1
-      - name: Build Redis
-        run: docker image build --file=res/Redis.7.docker.yml --tag=redis:7 .
-      - name: Build Redis Cluster Node - 0
-        run: docker image build --file=res/Redis.7.Cluster.0.docker.yml --tag=redis-cluster-0:7 .
-      - name: Build Redis Cluster Node - 1
-        run: docker image build --file=res/Redis.7.Cluster.1.docker.yml --tag=redis-cluster-1:7 .
-      - name: Build Redis Cluster Node - 2
-        run: docker image build --file=res/Redis.7.Cluster.2.docker.yml --tag=redis-cluster-2:7 .
       - name: Run Redis Cluster
-        run: docker-compose -p redis-cluster -f res/Redis.7.Cluster.docker-compose.yml up -d
-      - name: Check Redis Cluster Node - 0
-        run: docker logs redis-cluster-0 
-      - name: Check Redis Cluster Node - 1
-        run: docker logs redis-cluster-1 
-      - name: Check Redis Cluster Node - 2
-        run: docker logs redis-cluster-2 
-      - name: Check Redis Cluster Builder
-        run: docker logs redis-cluster-builder 2>&1
-      - name: Test Redis
+        uses: vishnudxb/redis-cluster@1.0.9
+        with:
+          master1-port: 7000
+          master2-port: 7001
+          master3-port: 7002
+          slave1-port: 7003
+          slave2-port: 7004
+          slave3-port: 7005
+          sleep-duration: 5 # Define the sleep duration for docker to start and ready for accepting connections (Here we set default to 5seconds)
+      - name: Check Redis Cluster
+        run: |
+          sudo apt-get install -y redis-tools
+          docker ps -a
+          redis-cli -h 127.0.0.1 -p 7000 ping
+          redis-cli -h 127.0.0.1 -p 7000 cluster nodes
+      - name: Test Redis Cluster
         run: python -m Liquirizia.Test test --pattern=RedisCluster.py
-      - name: Stop Redis Cluster
-        run: docker container stop redis-cluster
 
