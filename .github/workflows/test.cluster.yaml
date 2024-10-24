@@ -28,6 +28,8 @@ jobs:
         run: pip install --upgrade .
       - name: Build Redis
         run: docker image build --file=res/Redis.7.docker.yml --tag=redis:7 .
+      - name: Set System Ctrl
+        run: sysctl vm.overcommit_memory=1
       - name: Run Redis Cluster
         run: docker-compose -p redis-cluster -f res/Redis.7.Cluster.docker-compose.yml up -d
       - name: Check Redis Cluster Node -  0

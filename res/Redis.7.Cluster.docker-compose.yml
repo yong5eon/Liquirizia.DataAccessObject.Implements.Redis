@@ -3,7 +3,7 @@ services:
     image: redis:7
     container_name: redis-cluster-0
     volumes: 
-      - ./Redis.7.cluster.0.conf:/etc/redis/redis.conf
+      - res/Redis.7.cluster.0.conf:/etc/redis/redis.conf
     command: redis-server /etc/redis/redis.conf
     ports:
       - 7000:7000
@@ -13,7 +13,7 @@ services:
     image: redis:7
     container_name: redis-cluster-1
     volumes:
-      - ./Redis.7.cluster.1.conf:/etc/redis/redis.conf
+      - res/Redis.7.cluster.1.conf:/etc/redis/redis.conf
     command: redis-server /etc/redis/redis.conf
     ports:
       - 7001:7001
@@ -23,7 +23,7 @@ services:
     image: redis:7
     container_name: redis-cluster-2
     volumes:
-      - ./Redis.7.cluster.2.conf:/etc/redis/redis.conf
+      - res/Redis.7.cluster.2.conf:/etc/redis/redis.conf
     command: redis-server /etc/redis/redis.conf
     ports:
       - 7002:7002
