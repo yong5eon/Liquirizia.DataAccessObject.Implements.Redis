@@ -1,4 +1,3 @@
 ARG TAG=7
 FROM redis:$TAG
 ADD res/Redis.7.Cluster.0.conf /etc/redis/redis.conf
-RUN sysctl vm.overcommit_memory=1
