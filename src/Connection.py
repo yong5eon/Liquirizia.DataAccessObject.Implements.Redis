@@ -10,7 +10,10 @@ from collections.abc import Sequence, Set, Mapping
 from redis import (
 	Redis, 
 	ConnectionPool,
+)
+from redis.cluster import (
 	RedisCluster,
+	ClusterNode,
 )
 
 __all__ = (
@@ -35,20 +38,15 @@ class Connection(BaseConnection, Cache):
 		return
 
 	def connect(self):
+		# TODO : connect from url
 		if self.conf.type == ConnectionType.Cluster:
-			self.connection = RedisCluster(host=self.conf.host, port=self.conf.port)
-			print(self.connection.get_nodes())
+			self.connection = RedisCluster.from_url(self.conf.url)
 		if self.conf.type == ConnectionType.Pool:
 			if not self.pool:
-				self.pool = ConnectionPool(
-					host=self.conf.host, 
-					port=self.conf.port, 
-					max_connections=self.conf.max,
-					decode_responses=True
-				)
+				self.pool = ConnectionPool.from_url(self.conf.url)
 			self.connection = Redis(connection_pool=self.pool)
 		if not self.connection:	
-			self.connection = Redis(host=self.conf.host, port=self.conf.port, decode_responses=True)
+			self.connection = Redis.from_url(self.conf.url)
 		return
 
 	def close(self):

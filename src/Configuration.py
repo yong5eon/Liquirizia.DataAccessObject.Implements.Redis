@@ -9,6 +9,7 @@ from .Serializers.Text import (
 )
 
 from enum import Enum, auto
+from typing import Sequence, Union
 
 __all__ = (
 	'Configuration',
@@ -26,21 +27,31 @@ class Configuration(BaseConfiguration):
 
 	def __init__(
 		self,
-		host: str,
+		host: str = None,
 		port: int = 6379,
 		username: str = None,
 		password: str = None,
+		secure: bool = False,
 		type: ConnectionType = None,
-		max: int = 3,
+		max: int = 1,
 		encoder: Serializer = Encoder(),
 		decoder: Serializer = Decoder(),
 	):
 		self.host = host
 		self.port = port
-		self.user = username
+		self.username = username
 		self.password = password
+		self.secure = secure
 		self.type = type
 		self.max = max
 		self.encoder = encoder
 		self.decoder = decoder
+		self.database = 0
+		self.url = 'rediss://' if self.secure else 'redis://'
+		if self.username:
+			self.url += self.username
+			if self.password:
+				self.url += ':' + self.password
+			self.url += '@'
+		self.url += '{}:{}/{}'.format(self.host, self.port, self.database)
 		return

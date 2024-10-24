@@ -5,6 +5,7 @@ from Liquirizia.DataAccessObject import Helper
 from Liquirizia.DataAccessObject.Implements.Redis import (
 	Connection,
 	Configuration,
+	ConnectionType,
 )
 
 from random import randint
@@ -18,7 +19,7 @@ if __name__ == '__main__':
 		Connection,
 		Configuration(
 			host='127.0.0.1',  # Redis Host Address
-			port=6379,  # Redis Host Port
+			port=6379,  # Redis Host Porta
 		)
 	)
 
