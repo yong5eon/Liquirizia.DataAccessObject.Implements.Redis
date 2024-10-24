@@ -40,13 +40,13 @@ class Connection(BaseConnection, Cache):
 	def connect(self):
 		# TODO : connect from url
 		if self.conf.type == ConnectionType.Cluster:
-			self.connection = RedisCluster.from_url(self.conf.url)
+			self.connection = RedisCluster.from_url(self.conf.url, decode_responses=True)
 		if self.conf.type == ConnectionType.Pool:
 			if not self.pool:
-				self.pool = ConnectionPool.from_url(self.conf.url)
+				self.pool = ConnectionPool.from_url(self.conf.url, decode_responses=True)
 			self.connection = Redis(connection_pool=self.pool)
 		if not self.connection:	
-			self.connection = Redis.from_url(self.conf.url)
+			self.connection = Redis.from_url(self.conf.url, decode_responses=True)
 		return
 
 	def close(self):
