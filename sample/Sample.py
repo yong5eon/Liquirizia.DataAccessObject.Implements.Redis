@@ -2,18 +2,14 @@
 
 from Liquirizia.DataAccessObject import Helper
 
-from Liquirizia.DataAccessObject.Implements.Redis import Connection, Configuration
-
-from Liquirizia.DataAccessObject.Implements.Redis.Types import List
-from Liquirizia.DataAccessObject.Implements.Redis.Types import Set
-from Liquirizia.DataAccessObject.Implements.Redis.Types import SortedSet
-from Liquirizia.DataAccessObject.Implements.Redis.Types import Hash
+from Liquirizia.DataAccessObject.Implements.Redis import (
+	Connection,
+	Configuration,
+	ConnectionType,
+)
 
 from random import randint
-
 import sys
-import json
-
 
 if __name__ == '__main__':
 
@@ -23,9 +19,7 @@ if __name__ == '__main__':
 		Connection,
 		Configuration(
 			host='127.0.0.1',  # Redis Host Address
-			port=6379,  # Redis Host Port
-			max=1,  # Redis Maximum Connections
-			persistent=True   # Is Persistent Connection
+			port=6379,  # Redis Host Porta
 		)
 	)
 

@@ -17,7 +17,7 @@ from time import sleep
 from random import randint
 	
 
-class Redis(Case):
+class RedisCluster(Case):
 	@classmethod
 	def setUpClass(cls):
 		# Set connection
@@ -26,7 +26,8 @@ class Redis(Case):
 			Connection,
 			Configuration(
 				host='127.0.0.1',  # Redis Host Address
-				port=6379,  # Redis Host Port
+				port=7000,  # Redis Host Port
+				type=ConnectionType.Cluster,
 			)
 		)
 		return super().setUpClass()

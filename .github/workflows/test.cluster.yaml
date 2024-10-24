@@ -1,0 +1,47 @@
+name: Test Liquirizia.DataAccessObject.Implements.Redis with Cluster
+on: 
+  push:
+    pathes:
+      - src/**
+      - test/RedisCluster.py
+      - res/**
+      - .github/workflows/test.cluster.yml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{matrix.python-version}}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{matrix.python-version}} 
+      - name: Show Python Verison
+        run: python -c "import sys; print(sys.version)"
+      - name: Install pip 
+        run: python -m pip install --upgrade pip
+      - name: Install requirements
+        run: pip install --upgrade setuptools wheel ruff
+      - name: Install Packages
+        run: pip install --upgrade .
+      - name: Run Redis Cluster
+        uses: vishnudxb/redis-cluster@1.0.9
+        with:
+          master1-port: 7000
+          master2-port: 7001
+          master3-port: 7002
+          slave1-port: 7003
+          slave2-port: 7004
+          slave3-port: 7005
+          sleep-duration: 5 # Define the sleep duration for docker to start and ready for accepting connections (Here we set default to 5seconds)
+      - name: Check Redis Cluster
+        run: |
+          sudo apt-get install -y redis-tools
+          docker ps -a
+          redis-cli -h 127.0.0.1 -p 7000 ping
+          redis-cli -h 127.0.0.1 -p 7000 cluster nodes
+      - name: Test Redis Cluster
+        run: python -m Liquirizia.Test test --pattern=RedisCluster.py
+

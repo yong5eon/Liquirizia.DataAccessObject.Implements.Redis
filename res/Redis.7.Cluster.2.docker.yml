@@ -1,0 +1,3 @@
+ARG TAG=7
+FROM redis:$TAG
+ADD res/Redis.7.Cluster.2.conf /etc/redis/redis.conf

@@ -3,14 +3,21 @@
 from Liquirizia.DataAccessObject import Connection as BaseConnection
 from Liquirizia.DataAccessObject.Properties.Cache import Cache
 
-from .Configuration import Configuration
+from .Configuration import Configuration, ConnectionType
 
 from collections.abc import Sequence, Set, Mapping
 
-from redis import Redis, ConnectionPool
+from redis import (
+	Redis, 
+	ConnectionPool,
+)
+from redis.cluster import (
+	RedisCluster,
+	ClusterNode,
+)
 
 __all__ = (
-	'DataAccessObject'
+	'Connection',
 )
 
 
@@ -18,10 +25,8 @@ class Connection(BaseConnection, Cache):
 	"""Connection Class for Redis"""
 
 	def __init__(self, conf: Configuration):
-		if conf.persist:
-			self.pool = ConnectionPool(host=conf.host, port=conf.port, max_connections=conf.max, decode_responses=True)
-		else:
-			self.pool = None
+		self.conf = conf
+		self.pool = None
 		self.connection = None
 		self.encode = conf.encoder
 		self.decode = conf.decoder
@@ -33,10 +38,19 @@ class Connection(BaseConnection, Cache):
 		return
 
 	def connect(self):
-		if self.pool:
+		# TODO : connect from url
+		if self.conf.type == ConnectionType.Cluster:
+			self.connection = RedisCluster.from_url(
+				self.conf.url, 
+				decode_responses=True,
+				require_full_coverage=True,
+			)
+		if self.conf.type == ConnectionType.Pool:
+			if not self.pool:
+				self.pool = ConnectionPool.from_url(self.conf.url, decode_responses=True)
 			self.connection = Redis(connection_pool=self.pool)
-		else:
-			self.connection = Redis(host=self.conf.host, port=self.conf.port, decode_responses=True)
+		if not self.connection:	
+			self.connection = Redis.from_url(self.conf.url, decode_responses=True)
 		return
 
 	def close(self):
