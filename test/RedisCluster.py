@@ -3,7 +3,6 @@
 from Liquirizia.Test import *
 
 from Liquirizia.DataAccessObject import Helper
-from Liquirizia.DataAccessObject.Errors import *
 
 from Liquirizia.DataAccessObject.Implements.Redis import (
 	Configuration, 
