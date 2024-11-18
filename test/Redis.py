@@ -3,7 +3,6 @@
 from Liquirizia.Test import *
 
 from Liquirizia.DataAccessObject import Helper
-from Liquirizia.DataAccessObject.Errors import *
 
 from Liquirizia.DataAccessObject.Implements.Redis import (
 	Configuration, 
@@ -26,7 +25,7 @@ class Redis(Case):
 			Connection,
 			Configuration(
 				host='127.0.0.1',  # Redis Host Address
-				port=6379,  # Redis Host Port
+				port=7000,  # Redis Host Port
 			)
 		)
 		return super().setUpClass()

@@ -19,7 +19,8 @@ if __name__ == '__main__':
 		Connection,
 		Configuration(
 			host='127.0.0.1',  # Redis Host Address
-			port=6379,  # Redis Host Porta
+			port=7000,  # Redis Host Porta
+			# type=ConnectionType.Cluster # Connect to Cluster Redis
 		)
 	)
 
