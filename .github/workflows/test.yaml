@@ -1,16 +1,11 @@
-name: Test Liquirizia.DataAccessObject.Implements.Redis
-on: 
-  push:
-    pathes:
-      - src/**
-      - test/Redis.py
-      - res/Redis.7.docker.yml
-      - .github/workflows/test.yml
+name: Test Liquirizia.DataAccessObject.Implements.Redis 
+on: push
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}
     strategy:
       matrix:
+        os: [ubuntu-latest]
         python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
@@ -36,4 +31,3 @@ jobs:
         run: python -m Liquirizia.Test test --pattern=Redis.py
       - name: Stop Redis
         run: docker container stop redis
-
