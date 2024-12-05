@@ -1,16 +1,11 @@
 name: Test Liquirizia.DataAccessObject.Implements.Redis with Cluster
-on: 
-  push:
-    pathes:
-      - src/**
-      - test/RedisCluster.py
-      - res/**
-      - .github/workflows/test.cluster.yml
+on: push
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}
     strategy:
       matrix:
+        os: [ubuntu-latest]
         python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
     steps:
       - uses: actions/checkout@v4
@@ -44,4 +39,3 @@ jobs:
           redis-cli -h 127.0.0.1 -p 7000 cluster nodes
       - name: Test Redis Cluster
         run: python -m Liquirizia.Test test --pattern=RedisCluster.py
-
